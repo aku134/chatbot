@@ -1,0 +1,9 @@
+<title> Confirm Password </title>
+<h1> Confirm Password! </h1>
+<% if (warn == true) { %>
+    <p> Wrong password! </p>
+<% } %>
+<form method="POST">
+    <input type="password" name="password" placeholder="password" required>
+    <input name="confirm" type="submit" value="confirm">
+</form>

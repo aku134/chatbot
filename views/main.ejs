@@ -1,0 +1,22 @@
+<title> Chat </title>
+<h1> Chat! </h1>
+<% for (i = 0; i < usrMsg.length; ++i) { %>
+    <br></br>
+    <p> You: </p>
+    <p> <%- usrMsg[i] %> </p>
+    <br></br>
+    <p> Bot: </p>
+    <% if (usrMsg[i] == "/meme") { %>
+        <img src=<%- botMsg[i] %>>
+    <% } else { %>
+        <p> <%- botMsg[i] %> </p>
+    <% } %>
+    <br></br>
+<% } %>
+<form method="POST">
+    <input name="msg" placeholder="/start" required>
+    <input type="submit" value="send">
+</form>
+<form action="deleteaccount" method="POST">
+    <input name="deleteaccount" type="submit" value="deleteaccount">
+</form>
