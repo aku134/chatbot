@@ -39,7 +39,7 @@
         } else {
             flag = false
             if (req.cookies.username && req.cookies.password) {
-                if (req.cookies.password == JSON.parse(fs.readFileSync('node_modules/db/authentication'))[req.cookies.username]) {
+                if (crypto.createHash("sha256").update(req.cookies.password).digest("base64") == JSON.parse(fs.readFileSync('node_modules/db/authentication'))[req.cookies.username]) {
                     flag = true
                 }
             }
@@ -52,9 +52,9 @@
                             })
                         } else {
                             flag = JSON.parse(fs.readFileSync('node_modules/db/authentication'))
-                            flag[req.body.username] = crypto.createHash("sha256").update(req.body.password).digest("base64")
+                            flag[req.body.username] = crypto.createHash("sha256").update(crypto.createHash("sha256").update(req.body.password).digest("base64")).digest("base64")
                             fs.writeFileSync('node_modules/db/authentication', JSON.stringify(flag))
-                            res.cookie("password", JSON.parse(fs.readFileSync('node_modules/db/authentication'))[req.body.username])
+                            res.cookie("password", crypto.createHash("sha256").update(req.body.password).digest("base64"))
                             res.cookie("username", req.body.username)
                             flag = JSON.parse(fs.readFileSync('node_modules/db/usrMsg'))
                             flag[req.body.username] = []
@@ -74,8 +74,8 @@
                     }
                 } else if (req.body.login == "login") {
                     if (req.body.username && req.body.password) {
-                        if (JSON.parse(fs.readFileSync('node_modules/db/authentication'))[req.body.username] == crypto.createHash("sha256").update(req.body.password).digest("base64")) {
-                            res.cookie("password", JSON.parse(fs.readFileSync('node_modules/db/authentication'))[req.body.username])
+                        if (JSON.parse(fs.readFileSync('node_modules/db/authentication'))[req.body.username] == crypto.createHash("sha256").update(crypto.createHash("sha256").update(req.body.password).digest("base64")).digest("base64")) {
+                            res.cookie("password", crypto.createHash("sha256").update(req.body.password).digest("base64"))
                             res.cookie("username", req.body.username)
                             res.render("main", {
                                 botMsg: JSON.parse(fs.readFileSync('node_modules/db/botMsg'))[req.body.username],
@@ -174,7 +174,7 @@
 
             flag = false
             if (req.cookies.username && req.cookies.password) {
-                if (req.cookies.password == JSON.parse(fs.readFileSync('node_modules/db/authentication'))[req.cookies.username]) {
+                if (crypto.createHash("sha256").update(req.cookies.password).digest("base64") == JSON.parse(fs.readFileSync('node_modules/db/authentication'))[req.cookies.username]) {
                     flag = true
                 }
             }
@@ -183,7 +183,7 @@
                     warn: false
                 })
             } else if (flag && req.body.confirm == "confirm") {
-                if (JSON.parse(fs.readFileSync('node_modules/db/authentication'))[req.cookies.username] == crypto.createHash("sha256").update(req.body.password).digest("base64")) {
+                if (JSON.parse(fs.readFileSync('node_modules/db/authentication'))[req.cookies.username] == crypto.createHash("sha256").update(crypto.createHash("sha256").update(req.body.password).digest("base64")).digest("base64")) {
                     flag = JSON.parse(fs.readFileSync('node_modules/db/authentication'))
                     delete flag[req.cookies.username]
                     fs.writeFileSync('node_modules/db/authentication', JSON.stringify(flag))
