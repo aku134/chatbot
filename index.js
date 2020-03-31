@@ -33,8 +33,8 @@
     }
     app.all('/', async (req, res) => {
         if (clear) {
-            res.clearCookies("username")
-            res.clearCookies("password")
+            res.clearCookie("username")
+            res.clearCookie("password")
             res.render("sessiontimeout")
         } else {
             flag = false
@@ -166,8 +166,8 @@
     })
     app.all('/deleteaccount', async (req, res) => {
         if (clear) {
-            res.clearCookies("username")
-            res.clearCookies("password")
+            res.clearCookie("username")
+            res.clearCookie("password")
             res.render("sessiontimeout")
         } else {
 
@@ -206,8 +206,8 @@
     })
     app.all('*', async (req, res) => {
         if (clear) {
-            res.clearCookies("username")
-            res.clearCookies("password")
+            res.clearCookie("username")
+            res.clearCookie("password")
             res.render("sessiontimeout")
         } else {
             res.render('lost')
