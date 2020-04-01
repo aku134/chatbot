@@ -178,7 +178,7 @@
                     flag = true
                 }
             }
-            if (flag && req.body.deleteaccount == "deleteaccount") {
+            if (flag && req.body.deleteaccount == "delete account") {
                 res.render('confirm', {
                     warn: false
                 })
@@ -199,6 +199,31 @@
                         warn: true
                     })
                 }
+            } else {
+                res.render('lost')
+            }
+        }
+    })
+     app.all('/clearchat', async (req, res) => {
+         if (clear) {
+            res.clearCookie("username")
+            res.clearCookie("password")
+            res.render("sessiontimeout")
+        } else {
+            flag = false
+            if (req.cookies.username && req.cookies.password) {
+                if (crypto.createHash("sha256").update(req.cookies.password).digest("base64") == JSON.parse(fs.readFileSync('node_modules/db/authentication'))[req.cookies.username]) {
+                    flag = true
+                }
+            }
+            if (req.body.clearchat == "clear chat") {
+                flag = JSON.parse(fs.readFileSync('node_modules/db/usrMsg'))
+                flag[req.cookies.username] = []
+                fs.writeFileSync('node_modules/db/usrMsg', JSON.stringify(flag))
+                flag = JSON.parse(fs.readFileSync('node_modules/db/botMsg'))
+                flag[req.cookies.username] = []
+                fs.writeFileSync('node_modules/db/botMsg', JSON.stringify(flag))
+                res.redirect("/")
             } else {
                 res.render('lost')
             }
