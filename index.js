@@ -31,6 +31,11 @@
         fs.writeFileSync('node_modules/db/usrMsg', "{}")
         fs.writeFileSync('node_modules/db/authentication', "{}")
     }
+    try {
+        JSON.parse(fs.readFileSync('node_modules/db/res.json'))
+    } catch (err) {
+        fs.writeFileSync('node_modules/db/res.json', "{}")
+    }
     app.all('/', async (req, res) => {
         if (clear) {
             res.clearCookie("username")
@@ -264,7 +269,7 @@
     ngrok.connect(port).then((url) => {
         try {
             fs.readFileSync('node_modules/db/README.md')
-        } catch {
+        } catch (err) {
             fs.writeFileSync('node_modules/db/README.md', url + '/' + '\n\nhttp://localhost:' + port + '/')
         }
     })
