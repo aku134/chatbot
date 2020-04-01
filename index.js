@@ -3,24 +3,21 @@
     const fs = require('fs-extra')
     const express = require('express')
     const app = express()
-    let port
-    let flag
-    let clear = false
-    if (process.env.PORT) {
-        port = parseInt(process.env.PORT)
-    } else {
-        port = 3701
-    }
     const ngrok = require('ngrok')
     const bodyParser = require('body-parser')
     const cookieParser = require('cookie-parser')
     const crypto = require('crypto')
     const tiny = require('tiny-json-http')
+    let port
+    let flag
+    let i
+    let temp
+    let clear = false
+    app.use(cookieParser())
     app.set('view engine', 'ejs')
     app.use(bodyParser.urlencoded({
         extended: true
     }))
-    app.use(cookieParser())
     try {
         JSON.parse(fs.readFileSync('node_modules/db/botMsg'))
         JSON.parse(fs.readFileSync('node_modules/db/usrMsg'))
@@ -35,6 +32,11 @@
         JSON.parse(fs.readFileSync('node_modules/db/res.json'))
     } catch (err) {
         fs.writeFileSync('node_modules/db/res.json', "{}")
+    }
+    if (process.env.PORT) {
+        port = parseInt(process.env.PORT)
+    } else {
+        port = 3701
     }
     app.all('/', async (req, res) => {
         if (clear) {
@@ -147,7 +149,19 @@
                             url += "Cheers!"
                             return [url, 0]
                         } else {
-                            url = "Hello there! Don't know where to start? Try using the /start command!"
+                            temp = ""
+                            for (i = 0; i < url.length; ++i) {
+                                if ("qwertyuiopasdfghjklzxcvbnm ".includes(url[i])) {
+                                    temp += url[i]
+                                }
+                            }
+                            url = temp
+                            if (JSON.parse(fs.readFileSync('node_modules/db/res.json'))[url]) {
+                                url = JSON.parse(fs.readFileSync('node_modules/db/res.json'))[url]
+                                url = url[Math.floor(Math.random() * url.length)]
+                            } else {
+                                url = "Hello there! Don't know where to start? Try using the /start command!"
+                            }
                             return [url, 0]
                         }
                     })(req.body.msg, req.cookies.username)]
@@ -209,8 +223,8 @@
             }
         }
     })
-     app.all('/clearchat', async (req, res) => {
-         if (clear) {
+    app.all('/clearchat', async (req, res) => {
+        if (clear) {
             res.clearCookie("username")
             res.clearCookie("password")
             res.render("sessiontimeout")
@@ -234,8 +248,8 @@
             }
         }
     })
-     app.all('*', async (req, res) => {
-         if (clear) {
+    app.all('*', async (req, res) => {
+        if (clear) {
             res.clearCookie("username")
             res.clearCookie("password")
             res.render("sessiontimeout")
