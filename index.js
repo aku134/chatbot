@@ -150,6 +150,7 @@
                             return [url, 0]
                         } else {
                             temp = ""
+                            url = url.toLowerCase()
                             for (i = 0; i < url.length; ++i) {
                                 if ("qwertyuiopasdfghjklzxcvbnm ".includes(url[i])) {
                                     temp += url[i]
