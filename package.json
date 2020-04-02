@@ -15,6 +15,7 @@
     "express": "^4.17.1",
     "fs-extra": "^9.0.0",
     "ngrok": "^3.2.7",
+    "string-similarity": "^4.0.1",
     "tiny-json-http": "^7.1.2"
   }
 }

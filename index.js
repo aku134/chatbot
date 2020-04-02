@@ -1,5 +1,6 @@
 (async function() {
     const http = require('http')
+    const ss = require('string-similarity')
     const fs = require('fs-extra')
     const express = require('express')
     const app = express()
@@ -156,12 +157,17 @@
                                     temp += url[i]
                                 }
                             }
-                            url = temp
-                            if (JSON.parse(fs.readFileSync('node_modules/db/res.json'))[url]) {
-                                url = JSON.parse(fs.readFileSync('node_modules/db/res.json'))[url]
+                            url = Object.keys(JSON.parse(fs.readFileSync('node_modules/db/res.json')))
+                            url = ss.findBestMatch(temp, url)
+                            if (url.bestMatch.rating > 0.5) {
+                                url = JSON.parse(fs.readFileSync('node_modules/db/res.json'))[url.bestMatch.target]
                                 url = url[Math.floor(Math.random() * url.length)]
-                            } else {
+                            } else if (url.bestMatch.rating < 0.5) {
                                 url = "Hello there! Don't know where to start? Try using the /start command!"
+                            } else {
+                                url = JSON.parse(fs.readFileSync('node_modules/db/res.json'))[url.bestMatch.target]
+                                url = url[Math.floor(Math.random() * url.length)]
+                                url = [url, "Hello there! Don't know where to start? Try using the /start command!"][Math.floor(Math.random() * 2)]
                             }
                             return [url, 0]
                         }
