@@ -13,6 +13,7 @@
     let flag
     let i
     let temp
+    let url
     let clear = false
     app.use(cookieParser())
     app.set('view engine', 'ejs')
@@ -157,6 +158,15 @@
                                     temp += url[i]
                                 }
                             }
+                            temp = temp.split()
+                            temp = (function(temp) { url = {}
+                            temp.forEach(function(i) {
+                                    if(!url[i]) {
+                                    url[i] = true
+                                    }
+                                })
+                                return Object.keys(url);
+                                })(temp).join(" ")
                             url = Object.keys(JSON.parse(fs.readFileSync('node_modules/db/res.json')))
                             url = ss.findBestMatch(temp, url)
                             if (url.bestMatch.rating > 0.6) {
