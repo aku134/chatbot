@@ -159,10 +159,10 @@
                             }
                             url = Object.keys(JSON.parse(fs.readFileSync('node_modules/db/res.json')))
                             url = ss.findBestMatch(temp, url)
-                            if (url.bestMatch.rating > 0.5) {
+                            if (url.bestMatch.rating > 0.6) {
                                 url = JSON.parse(fs.readFileSync('node_modules/db/res.json'))[url.bestMatch.target]
                                 url = url[Math.floor(Math.random() * url.length)]
-                            } else if (url.bestMatch.rating < 0.5) {
+                            } else if (url.bestMatch.rating < 0.6) {
                                 url = "Hello there! Don't know where to start? Try using the /start command!"
                             } else {
                                 url = JSON.parse(fs.readFileSync('node_modules/db/res.json'))[url.bestMatch.target]
