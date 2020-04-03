@@ -4,7 +4,7 @@
     const fs = require('fs-extra')
     const express = require('express')
     const app = express()
-    const ngrok = require('ngrok')
+    let json = require('ngrok')
     const bodyParser = require('body-parser')
     const cookieParser = require('cookie-parser')
     const crypto = require('crypto')
@@ -29,11 +29,6 @@
         fs.writeFileSync('node_modules/db/botMsg', '{"":[]}')
         fs.writeFileSync('node_modules/db/usrMsg', '{"":[]}')
         fs.writeFileSync('node_modules/db/authentication', '{"":""}')
-    }
-    try {
-        JSON.parse(fs.readFileSync('node_modules/db/res.json'))
-    } catch (err) {
-        fs.writeFileSync('node_modules/db/res.json', '{"":[]}')
     }
     if (process.env.PORT) {
         port = parseInt(process.env.PORT)
@@ -167,15 +162,15 @@
                                 })
                                 return Object.keys(url);
                                 })(temp).join(" ")
-                            url = Object.keys(JSON.parse(fs.readFileSync('node_modules/db/res.json')))
+                            url = Object.keys(json)
                             url = ss.findBestMatch(temp, url)
                             if (url.bestMatch.rating > 0.6) {
-                                url = JSON.parse(fs.readFileSync('node_modules/db/res.json'))[url.bestMatch.target]
+                                url = json[url.bestMatch.target]
                                 url = url[Math.floor(Math.random() * url.length)]
                             } else if (url.bestMatch.rating < 0.6) {
                                 url = "Hello there! Don't know where to start? Try using the /start command!"
                             } else {
-                                url = JSON.parse(fs.readFileSync('node_modules/db/res.json'))[url.bestMatch.target]
+                                url = json[url.bestMatch.target]
                                 url = url[Math.floor(Math.random() * url.length)]
                                 url = [url, "Hello there! Don't know where to start? Try using the /start command!"][Math.floor(Math.random() * 2)]
                             }
@@ -297,13 +292,17 @@
         }
     })
     http.createServer(app).listen(port)
-    ngrok.connect(port).then((url) => {
+    json.connect(port).then((url) => {
         try {
             fs.readFileSync('node_modules/db/README.md')
         } catch (err) {
             fs.writeFileSync('node_modules/db/README.md', url + '/' + '\n\nhttp://localhost:' + port + '/')
         }
     })
+    url  = "https://gitlab.com/alias-rahil/db/-/raw/master/res.json"
+    json = await tiny.get({
+                                url
+                            })
     setInterval(
         () => {
             clear = true
