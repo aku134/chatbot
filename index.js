@@ -25,14 +25,14 @@
         JSON.parse(fs.readFileSync('node_modules/db/authentication'))
     } catch (err) {
         fs.mkdirsSync('node_modules/db')
-        fs.writeFileSync('node_modules/db/botMsg', "{}")
-        fs.writeFileSync('node_modules/db/usrMsg', "{}")
-        fs.writeFileSync('node_modules/db/authentication', "{}")
+        fs.writeFileSync('node_modules/db/botMsg', '{"":[]}')
+        fs.writeFileSync('node_modules/db/usrMsg', '{"":[]}')
+        fs.writeFileSync('node_modules/db/authentication', '{"":""}')
     }
     try {
         JSON.parse(fs.readFileSync('node_modules/db/res.json'))
     } catch (err) {
-        fs.writeFileSync('node_modules/db/res.json', "{}")
+        fs.writeFileSync('node_modules/db/res.json', '{"":[]}')
     }
     if (process.env.PORT) {
         port = parseInt(process.env.PORT)
