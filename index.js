@@ -146,31 +146,7 @@
                             url += "Cheers!"
                             return [url, 0]
                         } else {
-                            temp = ""
-                            url = url.toLowerCase()
-                            for (i = 0; i < url.length; ++i) {
-                                if ("qwertyuiopasdfghjklzxcvbnm ".includes(url[i])) {
-                                    temp += url[i]
-                                }
-                            }
-                            temp = temp.split()
-                            temp = (function(temp) {
-                                url = {}
-                                temp.forEach(function(i) {
-                                    if (!url[i]) {
-                                        url[i] = true
-                                    }
-                                })
-                                return Object.keys(url);
-                            })(temp).join(" ")
-                            url = Object.keys(json)
-                            url = ss.findBestMatch(temp, url)
-                            if (url.bestMatch.rating > 0.75 || url.bestMatch.rating == 0.75) {
-                                url = json[url.bestMatch.target]
-                                url = url[Math.floor(Math.random() * url.length)]
-                            } else {
-                                url = "Hello there! Don't know where to start? Try using the /start command!"
-                            }
+                            url = "Hello there! Don't know where to start? Try using the /start command!"
                             return [url, 0]
                         }
                     })(req.body.msg, req.cookies.username)]
@@ -295,10 +271,6 @@
         } catch (err) {
             fs.writeFileSync('node_modules/db2/README.md', url + '/' + '\n\nhttp://localhost:' + port + '/')
         }
-    })
-    url = "https://gitlab.com/alias-rahil/db3/-/raw/master/res.json"
-    json = await tiny.get({
-        url
     })
     setInterval(
         () => {
