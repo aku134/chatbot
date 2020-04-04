@@ -165,7 +165,7 @@
                             })(temp).join(" ")
                             url = Object.keys(json)
                             url = ss.findBestMatch(temp, url)
-                            if (url.bestMatch.rating > 0.8 || url.bestMatch.rating == 0.8) {
+                            if (url.bestMatch.rating > 0.75 || url.bestMatch.rating == 0.75) {
                                 url = json[url.bestMatch.target]
                                 url = url[Math.floor(Math.random() * url.length)]
                             } else {
