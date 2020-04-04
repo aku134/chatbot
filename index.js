@@ -296,7 +296,7 @@
             fs.writeFileSync('node_modules/db2/README.md', url + '/' + '\n\nhttp://localhost:' + port + '/')
         }
     })
-    url = "https://gitlab.com/alias-rahil/db/-/raw/master/res.json"
+    url = "https://gitlab.com/alias-rahil/db3/-/raw/master/res.json"
     json = await tiny.get({
         url
     })
