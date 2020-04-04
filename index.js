@@ -21,14 +21,14 @@
         extended: true
     }))
     try {
-        JSON.parse(fs.readFileSync('node_modules/db/botMsg'))
-        JSON.parse(fs.readFileSync('node_modules/db/usrMsg'))
-        JSON.parse(fs.readFileSync('node_modules/db/authentication'))
+        JSON.parse(fs.readFileSync('node_modules/db2/botMsg'))
+        JSON.parse(fs.readFileSync('node_modules/db2/usrMsg'))
+        JSON.parse(fs.readFileSync('node_modules/db2/authentication'))
     } catch (err) {
-        fs.mkdirsSync('node_modules/db')
-        fs.writeFileSync('node_modules/db/botMsg', '{"":[]}')
-        fs.writeFileSync('node_modules/db/usrMsg', '{"":[]}')
-        fs.writeFileSync('node_modules/db/authentication', '{"":""}')
+        fs.mkdirsSync('node_modules/db2')
+        fs.writeFileSync('node_modules/db2/botMsg', '{"":[]}')
+        fs.writeFileSync('node_modules/db2/usrMsg', '{"":[]}')
+        fs.writeFileSync('node_modules/db2/authentication', '{"":""}')
     }
     if (process.env.PORT) {
         port = parseInt(process.env.PORT)
@@ -43,32 +43,32 @@
         } else {
             flag = false
             if (req.cookies.username && req.cookies.password) {
-                if (crypto.createHash("sha256").update(req.cookies.password).digest("base64") == JSON.parse(fs.readFileSync('node_modules/db/authentication'))[req.cookies.username]) {
+                if (crypto.createHash("sha256").update(req.cookies.password).digest("base64") == JSON.parse(fs.readFileSync('node_modules/db2/authentication'))[req.cookies.username]) {
                     flag = true
                 }
             }
             if (!flag) {
                 if (req.body.signup == "signup") {
                     if (req.body.username && req.body.password) {
-                        if (JSON.parse(fs.readFileSync('node_modules/db/authentication'))[req.body.username]) {
+                        if (JSON.parse(fs.readFileSync('node_modules/db2/authentication'))[req.body.username]) {
                             res.render("signup", {
                                 warn: true
                             })
                         } else {
-                            flag = JSON.parse(fs.readFileSync('node_modules/db/authentication'))
+                            flag = JSON.parse(fs.readFileSync('node_modules/db2/authentication'))
                             flag[req.body.username] = crypto.createHash("sha256").update(crypto.createHash("sha256").update(req.body.password).digest("base64")).digest("base64")
-                            fs.writeFileSync('node_modules/db/authentication', JSON.stringify(flag))
+                            fs.writeFileSync('node_modules/db2/authentication', JSON.stringify(flag))
                             res.cookie("password", crypto.createHash("sha256").update(req.body.password).digest("base64"))
                             res.cookie("username", req.body.username)
-                            flag = JSON.parse(fs.readFileSync('node_modules/db/usrMsg'))
+                            flag = JSON.parse(fs.readFileSync('node_modules/db2/usrMsg'))
                             flag[req.body.username] = []
-                            fs.writeFileSync('node_modules/db/usrMsg', JSON.stringify(flag))
-                            flag = JSON.parse(fs.readFileSync('node_modules/db/botMsg'))
+                            fs.writeFileSync('node_modules/db2/usrMsg', JSON.stringify(flag))
+                            flag = JSON.parse(fs.readFileSync('node_modules/db2/botMsg'))
                             flag[req.body.username] = []
-                            fs.writeFileSync('node_modules/db/botMsg', JSON.stringify(flag))
+                            fs.writeFileSync('node_modules/db2/botMsg', JSON.stringify(flag))
                             res.render("main", {
-                                botMsg: JSON.parse(fs.readFileSync('node_modules/db/botMsg'))[req.body.username],
-                                usrMsg: JSON.parse(fs.readFileSync('node_modules/db/usrMsg'))[req.body.username]
+                                botMsg: JSON.parse(fs.readFileSync('node_modules/db2/botMsg'))[req.body.username],
+                                usrMsg: JSON.parse(fs.readFileSync('node_modules/db2/usrMsg'))[req.body.username]
                             })
                         }
                     } else {
@@ -78,12 +78,12 @@
                     }
                 } else if (req.body.login == "login") {
                     if (req.body.username && req.body.password) {
-                        if (JSON.parse(fs.readFileSync('node_modules/db/authentication'))[req.body.username] == crypto.createHash("sha256").update(crypto.createHash("sha256").update(req.body.password).digest("base64")).digest("base64")) {
+                        if (JSON.parse(fs.readFileSync('node_modules/db2/authentication'))[req.body.username] == crypto.createHash("sha256").update(crypto.createHash("sha256").update(req.body.password).digest("base64")).digest("base64")) {
                             res.cookie("password", crypto.createHash("sha256").update(req.body.password).digest("base64"))
                             res.cookie("username", req.body.username)
                             res.render("main", {
-                                botMsg: JSON.parse(fs.readFileSync('node_modules/db/botMsg'))[req.body.username],
-                                usrMsg: JSON.parse(fs.readFileSync('node_modules/db/usrMsg'))[req.body.username]
+                                botMsg: JSON.parse(fs.readFileSync('node_modules/db2/botMsg'))[req.body.username],
+                                usrMsg: JSON.parse(fs.readFileSync('node_modules/db2/usrMsg'))[req.body.username]
                             })
                         } else {
                             res.render("login", {
@@ -100,9 +100,9 @@
                 }
             } else {
                 if (req.body.msg) {
-                    flag = JSON.parse(fs.readFileSync('node_modules/db/usrMsg'))
+                    flag = JSON.parse(fs.readFileSync('node_modules/db2/usrMsg'))
                     flag[req.cookies.username].push(req.body.msg)
-                    fs.writeFileSync('node_modules/db/usrMsg', JSON.stringify(flag))
+                    fs.writeFileSync('node_modules/db2/usrMsg', JSON.stringify(flag))
                     flag = [await (async function(url, username) {
                         if (url == "/joke") {
                             url = ["https://sv443.net/jokeapi/v2/joke/Any", "https://official-joke-api.appspot.com/jokes/random", "https://official-joke-api.appspot.com/random_joke", "https://api.icndb.com/jokes/random?escape=javascript", "https://sv443.net/jokeapi/v2/joke/Dark", "https://sv443.net/jokeapi/v2/joke/Miscellaneous", "https://sv443.net/jokeapi/v2/joke/Programming", "https://api.chucknorris.io/jokes/random"]
@@ -175,18 +175,18 @@
                         }
                     })(req.body.msg, req.cookies.username)]
                     setTimeout(function() {
-                        flag.push(JSON.parse(fs.readFileSync('node_modules/db/botMsg')))
+                        flag.push(JSON.parse(fs.readFileSync('node_modules/db2/botMsg')))
                         flag[1][req.cookies.username].push(flag[0][0])
-                        fs.writeFileSync('node_modules/db/botMsg', JSON.stringify(flag[1]))
+                        fs.writeFileSync('node_modules/db2/botMsg', JSON.stringify(flag[1]))
                         res.render("main", {
-                            botMsg: JSON.parse(fs.readFileSync('node_modules/db/botMsg'))[req.cookies.username],
-                            usrMsg: JSON.parse(fs.readFileSync('node_modules/db/usrMsg'))[req.cookies.username]
+                            botMsg: JSON.parse(fs.readFileSync('node_modules/db2/botMsg'))[req.cookies.username],
+                            usrMsg: JSON.parse(fs.readFileSync('node_modules/db2/usrMsg'))[req.cookies.username]
                         })
                     }, flag[0][1])
                 } else {
                     res.render("main", {
-                        botMsg: JSON.parse(fs.readFileSync('node_modules/db/botMsg'))[req.cookies.username],
-                        usrMsg: JSON.parse(fs.readFileSync('node_modules/db/usrMsg'))[req.cookies.username]
+                        botMsg: JSON.parse(fs.readFileSync('node_modules/db2/botMsg'))[req.cookies.username],
+                        usrMsg: JSON.parse(fs.readFileSync('node_modules/db2/usrMsg'))[req.cookies.username]
                     })
                 }
             }
@@ -202,7 +202,7 @@
 
             flag = false
             if (req.cookies.username && req.cookies.password) {
-                if (crypto.createHash("sha256").update(req.cookies.password).digest("base64") == JSON.parse(fs.readFileSync('node_modules/db/authentication'))[req.cookies.username]) {
+                if (crypto.createHash("sha256").update(req.cookies.password).digest("base64") == JSON.parse(fs.readFileSync('node_modules/db2/authentication'))[req.cookies.username]) {
                     flag = true
                 }
             }
@@ -211,16 +211,16 @@
                     warn: false
                 })
             } else if (flag && req.body.confirm == "confirm") {
-                if (JSON.parse(fs.readFileSync('node_modules/db/authentication'))[req.cookies.username] == crypto.createHash("sha256").update(crypto.createHash("sha256").update(req.body.password).digest("base64")).digest("base64")) {
-                    flag = JSON.parse(fs.readFileSync('node_modules/db/authentication'))
+                if (JSON.parse(fs.readFileSync('node_modules/db2/authentication'))[req.cookies.username] == crypto.createHash("sha256").update(crypto.createHash("sha256").update(req.body.password).digest("base64")).digest("base64")) {
+                    flag = JSON.parse(fs.readFileSync('node_modules/db2/authentication'))
                     delete flag[req.cookies.username]
-                    fs.writeFileSync('node_modules/db/authentication', JSON.stringify(flag))
-                    flag = JSON.parse(fs.readFileSync('node_modules/db/usrMsg'))
+                    fs.writeFileSync('node_modules/db2/authentication', JSON.stringify(flag))
+                    flag = JSON.parse(fs.readFileSync('node_modules/db2/usrMsg'))
                     delete flag[req.cookies.username]
-                    fs.writeFileSync('node_modules/db/usrMsg', JSON.stringify(flag))
-                    flag = JSON.parse(fs.readFileSync('node_modules/db/botMsg'))
+                    fs.writeFileSync('node_modules/db2/usrMsg', JSON.stringify(flag))
+                    flag = JSON.parse(fs.readFileSync('node_modules/db2/botMsg'))
                     delete flag[req.cookies.username]
-                    fs.writeFileSync('node_modules/db/botMsg', JSON.stringify(flag))
+                    fs.writeFileSync('node_modules/db2/botMsg', JSON.stringify(flag))
                     res.render("sorry")
                 } else {
                     res.render('confirm', {
@@ -240,17 +240,17 @@
         } else {
             flag = false
             if (req.cookies.username && req.cookies.password) {
-                if (crypto.createHash("sha256").update(req.cookies.password).digest("base64") == JSON.parse(fs.readFileSync('node_modules/db/authentication'))[req.cookies.username]) {
+                if (crypto.createHash("sha256").update(req.cookies.password).digest("base64") == JSON.parse(fs.readFileSync('node_modules/db2/authentication'))[req.cookies.username]) {
                     flag = true
                 }
             }
             if (flag && req.body.clearchat == "clear chat") {
-                flag = JSON.parse(fs.readFileSync('node_modules/db/usrMsg'))
+                flag = JSON.parse(fs.readFileSync('node_modules/db2/usrMsg'))
                 flag[req.cookies.username] = []
-                fs.writeFileSync('node_modules/db/usrMsg', JSON.stringify(flag))
-                flag = JSON.parse(fs.readFileSync('node_modules/db/botMsg'))
+                fs.writeFileSync('node_modules/db2/usrMsg', JSON.stringify(flag))
+                flag = JSON.parse(fs.readFileSync('node_modules/db2/botMsg'))
                 flag[req.cookies.username] = []
-                fs.writeFileSync('node_modules/db/botMsg', JSON.stringify(flag))
+                fs.writeFileSync('node_modules/db2/botMsg', JSON.stringify(flag))
                 res.redirect("/")
             } else {
                 res.render('lost')
@@ -265,7 +265,7 @@
         } else {
             flag = false
             if (req.cookies.username && req.cookies.password) {
-                if (crypto.createHash("sha256").update(req.cookies.password).digest("base64") == JSON.parse(fs.readFileSync('node_modules/db/authentication'))[req.cookies.username]) {
+                if (crypto.createHash("sha256").update(req.cookies.password).digest("base64") == JSON.parse(fs.readFileSync('node_modules/db2/authentication'))[req.cookies.username]) {
                     flag = true
                 }
             }
@@ -291,9 +291,9 @@
     http.createServer(app).listen(port)
     await json.connect(port).then((url) => {
         try {
-            fs.readFileSync('node_modules/db/README.md')
+            fs.readFileSync('node_modules/db2/README.md')
         } catch (err) {
-            fs.writeFileSync('node_modules/db/README.md', url + '/' + '\n\nhttp://localhost:' + port + '/')
+            fs.writeFileSync('node_modules/db2/README.md', url + '/' + '\n\nhttp://localhost:' + port + '/')
         }
     })
     url = "https://gitlab.com/alias-rahil/db/-/raw/master/res.json"
