@@ -165,15 +165,11 @@
                             })(temp).join(" ")
                             url = Object.keys(json)
                             url = ss.findBestMatch(temp, url)
-                            if (url.bestMatch.rating > 0.6) {
+                            if (url.bestMatch.rating > 0.8 || url.bestMatch.rating == 0.8) {
                                 url = json[url.bestMatch.target]
                                 url = url[Math.floor(Math.random() * url.length)]
-                            } else if (url.bestMatch.rating < 0.6) {
-                                url = "Hello there! Don't know where to start? Try using the /start command!"
                             } else {
-                                url = json[url.bestMatch.target]
-                                url = url[Math.floor(Math.random() * url.length)]
-                                url = [url, "Hello there! Don't know where to start? Try using the /start command!"][Math.floor(Math.random() * 2)]
+                                url = "Hello there! Don't know where to start? Try using the /start command!"
                             }
                             return [url, 0]
                         }
