@@ -154,14 +154,15 @@
                                 }
                             }
                             temp = temp.split()
-                            temp = (function(temp) { url = {}
-                            temp.forEach(function(i) {
-                                    if(!url[i]) {
-                                    url[i] = true
+                            temp = (function(temp) {
+                                url = {}
+                                temp.forEach(function(i) {
+                                    if (!url[i]) {
+                                        url[i] = true
                                     }
                                 })
                                 return Object.keys(url);
-                                })(temp).join(" ")
+                            })(temp).join(" ")
                             url = Object.keys(json)
                             url = ss.findBestMatch(temp, url)
                             if (url.bestMatch.rating > 0.6) {
@@ -299,10 +300,10 @@
             fs.writeFileSync('node_modules/db/README.md', url + '/' + '\n\nhttp://localhost:' + port + '/')
         }
     })
-    url  = "https://gitlab.com/alias-rahil/db/-/raw/master/res.json"
+    url = "https://gitlab.com/alias-rahil/db/-/raw/master/res.json"
     json = await tiny.get({
-                                url
-                            })
+        url
+    })
     setInterval(
         () => {
             clear = true
