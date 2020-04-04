@@ -293,7 +293,7 @@
         }
     })
     http.createServer(app).listen(port)
-    json.connect(port).then((url) => {
+    await json.connect(port).then((url) => {
         try {
             fs.readFileSync('node_modules/db/README.md')
         } catch (err) {
